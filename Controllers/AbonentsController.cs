@@ -3,7 +3,6 @@ using DBA_Backend.Models.DatabaseModels.Repositories;
 using DBA_Backend.Models.Enums;
 using DBA_Backend.Models.FilterModels;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace DBA_Backend.Controllers
 {
@@ -39,7 +38,7 @@ namespace DBA_Backend.Controllers
                     AbonentsCount = a.Count()
                 });
 
-            return Ok(JsonConvert.SerializeObject(result));           
+            return Ok(result);           
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace DBA_Backend.Controllers
             [FromQuery]AbonentFiltersModel filter = null, [FromQuery] SortingFieldsEnum? sortField = null,
             bool sortByDesc = false)
         {
-            return Ok(JsonConvert.SerializeObject(await GetAbonentsFromRepository(pageNumber, pageSize, filter, sortField, sortByDesc)));
+            return Ok(await GetAbonentsFromRepository(pageNumber, pageSize, filter, sortField, sortByDesc));
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace DBA_Backend.Controllers
             [FromQuery] SortingFieldsEnum? sortField = null,
             bool sortByDesc = false)
         {
-            return Ok(JsonConvert.SerializeObject((await GetAbonentsFromRepository(filter: filter, sortField: sortField, sortByDesc: sortByDesc)).Count()));
+            return Ok((await GetAbonentsFromRepository(filter: filter, sortField: sortField, sortByDesc: sortByDesc)).Count());
         }
 
         private async Task<IEnumerable<Abonent>> GetAbonentsFromRepository(int? pageNumber = null, int? pageSize = null,
@@ -104,7 +103,7 @@ namespace DBA_Backend.Controllers
 
             var resultAbonents = abonents.Where(a => a.PhoneNumbers.Any(n => n.Number.Contains(phoneNumber)));
 
-            return Ok(JsonConvert.SerializeObject(resultAbonents));
+            return Ok(resultAbonents);
         }
 
         public class AbonentsOnStreetsCountModel
